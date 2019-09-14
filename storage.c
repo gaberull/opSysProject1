@@ -31,3 +31,12 @@ int close_storage(STORAGE *storage)
     free();
     return close(storage->fd)
 }
+
+/*
+ * reads len num of bytes into buf starting with offset location. Returns
+ * number of bytes read. 0 if at EOF or a negative num on error. 
+ */
+int get_bytes(STORAGE *storage, unsigned char *buf, int location, int len)
+{
+   // TODO implement this
+}
