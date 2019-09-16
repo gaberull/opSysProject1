@@ -5,14 +5,14 @@
 #include <stdio.h>
 #include "storage.h"
 
-//TODO ask TA about makefile and how to test this API
+//TODO ask TA about Makefile and how to test this API
 
 /* opens the file for reading and writing, creating it if it doesn't exist. If
  * successful, returns dynamically created STORAGE obj. Else returns NULL
  */
 STORAGE * init_storage(char * name)
 {
-    STORAGE *st = malloc(sizeof(STORAGE)); // TODO check - allocate storage on heap
+    STORAGE *st = malloc(sizeof(STORAGE)); //  allocate storage on heap
     st->fd = open(name, O_RDWR | O_CREAT);
     if (st->fd == -1)  // open file was unsuccessful
     {
@@ -30,8 +30,9 @@ STORAGE * init_storage(char * name)
  */
 int close_storage(STORAGE *storage)
 {
-    free(storage); //TODO should this be the pointer?
-    return close(storage->fd)
+    int ret = close(storage->fd);
+    free(storage); 
+    return ret;
 }
 
 /*
@@ -68,7 +69,6 @@ int put_bytes(STORAGE *storage, unsigned char *buf, int location, int len);
         return -1;
     }
     if (ret == 0) printf("EOF\n");
-    buf[len] = '\0';           // TODO check this
     return ret;
 }
 
