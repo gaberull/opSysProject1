@@ -4,8 +4,7 @@
 #include <fcntl.h>
 #include <stdio.h>
 #include "storage.h"
-
-//TODO ask TA about Makefile and how to test this API
+#include <stdlib.h>
 
 /* opens the file for reading and writing, creating it if it doesn't exist. If
  * successful, returns dynamically created STORAGE obj. Else returns NULL
@@ -13,7 +12,7 @@
 STORAGE * init_storage(char * name)
 {
     STORAGE *st = malloc(sizeof(STORAGE)); //  allocate storage on heap
-    st->fd = open(name, O_RDWR | O_CREAT);
+    st->fd = open(name, O_RDWR | O_CREAT, S_IRWXU);//TODO check these flags, mode
     if (st->fd == -1)  // open file was unsuccessful
     {
         perror("failed to open");
@@ -42,9 +41,9 @@ int close_storage(STORAGE *storage)
 int get_bytes(STORAGE *storage, unsigned char *buf, int location, int len)
 {
     //     
-    int off = lskeek(storage->fd, location, SEEK_SET);
+    int off = lseek(storage->fd, location, SEEK_SET);
     if (off == -1) perror("error has occured during lseek()");
-    int ret = read(storage->fd, buf, len); //TODO should this have sizeof(storage)?
+    int ret = read(storage->fd, buf, len); //TA said it is fine to use len directly - the size of a char is one byte he said.
     if (ret < 0) perror ("Read error");
     if (ret == 0) printf("EOF\n");
 
@@ -58,11 +57,11 @@ int get_bytes(STORAGE *storage, unsigned char *buf, int location, int len)
  * Writes the first len bytes in buf to the storage file, starting at location
  * Returns the number of bytes written, or a negative number on error
  */
-int put_bytes(STORAGE *storage, unsigned char *buf, int location, int len);
+int put_bytes(STORAGE *storage, unsigned char *buf, int location, int len)
 {
-   int off = lseek(storage->fd, location, SEEK_SET);  // set offset to location from parameter
+   off_t off = lseek(storage->fd, location, SEEK_SET);  // set offset to location from parameter
     if (off == -1) perror("error has occurred during lseek() operation");
-    int ret = write(storage->fd, buff, len); // TODO should have sizeof()?
+    int ret = write(storage->fd, buf, len); //TA said to use len directly - the size of a char is 1 byte 
     if (ret == -1) 
     {
         perror("error has occured during write() operation");
@@ -72,4 +71,12 @@ int put_bytes(STORAGE *storage, unsigned char *buf, int location, int len);
     return ret;
 }
 
-    // Question for TA: when it comes to size_t for read or write, is that a different type that must be converted? Or if you have an int that you know is the number of bytes you need, can you just put that in there?
+int main()
+{
+    // testing init_storage
+    init_storage("testFile");
+
+
+    return 0;
+    
+}
