@@ -71,3 +71,5 @@ int put_bytes(STORAGE *storage, unsigned char *buf, int location, int len);
     buf[len] = '\0';           // TODO check this
     return ret;
 }
+
+    // Question for TA: when it comes to size_t for read or write, is that a different type that must be converted? Or if you have an int that you know is the number of bytes you need, can you just put that in there?
