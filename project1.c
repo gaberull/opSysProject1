@@ -21,88 +21,106 @@
 
 const char SEPARATORS[] = " \t\n";
 char in_buffer[200];           // Input buffer from STDIN. command input buffer INBUFFSIZE = 200
-char * args[100];               // pointers to arg strings MAX_ARGS
+char * args[100];               // the arguments split up
 char ** arg;                 // working pointer that steps through the args
 char charBuffer[128];             // the 128 byte buffer that holds all input numbers
 
+
 void list()
 {
-    for (int i=0; i<16; ++i)    // print first 16 char array spots
+            /*
+    for (int k=0; k<128; k++)       // testing charbuffer
     {
-        fprintf(stdout, "<#const char *restrict, ...#>")
+        charBuffer[k] = 0;
+    }
+             */
+    for (int j=0; j<8; j++)
+    {
+        for (int i=0; i<16; ++i)    // print first 16 char array spots
+        {
+            printf("%02x", charBuffer[j*16+i]);
+        }
+        printf("\n");
     }
 }
 
 void zero()
 {
+    for (int i=0; i<128; i++)
+    {
+        charBuffer[i] = 0;
+    }
+}
+
+void writeByte(char** args)   // set the specified byte to input value
+{
+    // TODO: error checking for number of args.
+    int* location = (int*) *args;       // will grab the next 4 bytesfor an int
+    args++;
+    charBuffer[*location] = **args;
     
 }
 
-void writeByte(char* arg)   // set the specified byte to input value
+void readByte(char** arg)
+{
+    
+}
+void writeHex(char** arb)
 {
     
 }
 
-void readByte(char* arg)
-{
-    
-}
-void writeHex(char* arb)
+void writeChar(char** arg)
 {
     
 }
 
-void writeChar(char* arg)
+void readHex(char** arg)
 {
     
 }
 
-void readHex(char* arg)
+void readChar(char** arg)
 {
     
 }
 
-void readChar(char* arg)
+void writeInt(char** arg)
 {
     
 }
 
-void writeInt(char* arg)
+void readInt(char** arg)
 {
     
 }
 
-void readInt(char* arg)
+void writeFloat(char** arg)
 {
     
 }
 
-void writeFloat(char* arg)
+void readFloat(char** arg)
 {
     
 }
 
-void readFloat(char* arg)
+void writeString(char** arg)
 {
     
 }
 
-void writeString(char* arg)
+void readString(char** arg)
 {
     
 }
 
-void readString(char* arg)
+void writeToFile(char** arg)
 {
     
 }
 
-void writeToFile(char* arg)
-{
-    
-}
-
-void readFileToBuf(char* arg)
+void readFileToBuf(char** arg)
 {
     
 }
@@ -115,39 +133,40 @@ int main(int argc, const char * argv[])
         arg = args;
         *arg++ = strtok(in_buffer,SEPARATORS);   // tokenize input
         while ((*arg++ = strtok(NULL,SEPARATORS)));
+        arg++;
         switch(*arg[0])
         {
             case 'l' :  list();
                 break;
             case 'z' :  zero();
                 break;
-            case 'b' : writeByte(*arg);
+            case 'b' : writeByte(arg);
                 break;
-            case 'B' : readByte(*arg);
+            case 'B' : readByte(arg);
                 break;
-            case 'h' : writeHex(*arg);
+            case 'h' : writeHex(arg);
                 break;
-            case 'H' : readByte(*arg);
+            case 'H' : readByte(arg);
                 break;
-            case 'c' : writeChar(*arg);
+            case 'c' : writeChar(arg);
                 break;
-            case 'C' : readChar(*arg);
+            case 'C' : readChar(arg);
                 break;
-            case 'i' : writeInt(*arg);
+            case 'i' : writeInt(arg);
                 break;
-            case 'I' : readInt(*arg);
+            case 'I' : readInt(arg);
                 break;
-            case 'f' : writeFloat(*arg);
+            case 'f' : writeFloat(arg);
                 break;
-            case 'F' : readFloat(*arg);
+            case 'F' : readFloat(arg);
                 break;
-            case 's' : writeString(*arg);
+            case 's' : writeString(arg);
                 break;
-            case 'S' : readString(*arg);
+            case 'S' : readString(arg);
                 break;
-            case 'w' : writeToFile(*arg);
+            case 'w' : writeToFile(arg);
                 break;
-            case 'r' : readFileToBuf(*arg);
+            case 'r' : readFileToBuf(arg);
                 break;
 
         }
