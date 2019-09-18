@@ -38,13 +38,13 @@ void list()
     {
         for (int i=0; i<16; ++i)    // print first 16 char array spots
         {
-            printf("%02x", charBuffer[j*16+i]);
+            printf("%02x ", charBuffer[j*16+i]);       // row majoy ordering
         }
         printf("\n");
     }
 }
 
-void zero()
+void zero()         // zeroes out entire buffer
 {
     for (int i=0; i<128; i++)
     {
@@ -52,13 +52,12 @@ void zero()
     }
 }
 
-void writeByte(char** args)   // set the specified byte to input value
+void writeByte(char** arg)   // set the specified byte to input value
 {
     // TODO: error checking for number of args.
-    int* location = (int*) *args;       // will grab the next 4 bytesfor an int
-    args++;
-    charBuffer[*location] = **args;
-    
+    int location = atoi(*arg);       // will grab the next 4 bytesfor anint
+    arg++;
+    charBuffer[location] = atoi(*arg); // convert char array at *arg to int
 }
 
 void readByte(char** arg)
@@ -130,11 +129,14 @@ int main(int argc, const char * argv[])
 {
     while(fgets(in_buffer, 100, stdin)!= NULL) // TODO: check         MAX_ARGS
     {
-        arg = args;
+        arg = args;                 // arg is like an iterator through string of arguments (args)
         *arg++ = strtok(in_buffer,SEPARATORS);   // tokenize input
         while ((*arg++ = strtok(NULL,SEPARATORS)));
+        arg = args;
+        char option = **arg;
         arg++;
-        switch(*arg[0])
+        
+        switch(option)
         {
             case 'l' :  list();
                 break;
