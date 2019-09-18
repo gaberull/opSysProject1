@@ -26,7 +26,7 @@ char ** arg;                 // working pointer that steps through the args
 char charBuffer[128];             // the 128 byte buffer that holds all input numbers
 
 
-void list()
+void list()         // 'l' **
 {
             /*
     for (int k=0; k<128; k++)       // testing charbuffer
@@ -44,7 +44,7 @@ void list()
     }
 }
 
-void zero()         // zeroes out entire buffer
+void zero()         // 'z'** zeroes out entire buffer
 {
     for (int i=0; i<128; i++)
     {
@@ -52,74 +52,119 @@ void zero()         // zeroes out entire buffer
     }
 }
 
-void writeByte(char** arg)   // set the specified byte to input value
+void writeByte(char** arg)   // 'b'** set the specified byte to input value
 {
     // TODO: error checking for number of args.
-    int location = atoi(*arg);       // will grab the next 4 bytesfor anint
+    int location = atoi(*arg);       // atoi() converts char buffer to int
     arg++;
     charBuffer[location] = atoi(*arg); // convert char array at *arg to int
 }
 
-void readByte(char** arg)
+void readByte(char** arg)           // 'B'**
 {
-    
+    int location = atoi(*arg);
+    printf("%d\n", charBuffer[location]);
 }
-void writeHex(char** arb)
+void writeHex(char** arg)               // 'h'
+{
+    int location = atoi(*arg);
+    arg++;                      // move arg to next number
+    // call charToHex function before writing to buffer
+    
+    long int num = strtol(*arg, 0,16); // convert string to long, tell it the values in that string are in hexadecimal
+    //char first = (*arg)[0];//**arg;
+    //char second = (*arg)[1]; //*(*arg+1);
+        charBuffer[location] = num;
+}
+
+void writeChar(char** arg)          // 'c'
 {
     
 }
 
-void writeChar(char** arg)
+void readHex(char** arg)            // 'H'
 {
     
 }
 
-void readHex(char** arg)
+void readChar(char** arg)       // 'C'
 {
     
 }
 
-void readChar(char** arg)
+void writeInt(char** arg)       // 'i'** write an integer value to buffer location. Stores over how ever many bytes are required.
+{
+    int location = atoi(*arg);
+    arg++;
+    int toStore = atoi(*arg);
+    char* ptr = &charBuffer[location];
+    memcpy(ptr, *arg, sizeof(toStore));
+    
+        /*
+    
+    int num = atoi(*arg)
+    //long int num = strtol(*arg, 0,16);
+    int input[sizeof(num)];
+    sprintf(input, "%02x", num);
+    
+    char* spotInMem = &charBuffer[location];
+    long int num = strtol(*arg, 0,16);
+    int numdigits = log10(num) + 1;
+    char s[numdigits];
+    sscanf(*arg, %02x, charBuffer[location]);
+    sprintf(s, %x02, num);
+    memcpy(spotInMem, *arg, strlen(*arg));
+                 */               /*
+    int location = atoi(*arg);
+    arg++;
+    
+    long int num = strtol(*arg, 0,16);  // convert character to hex
+    
+    int size = sizeof(num);
+    int numDigits = log10(num) + 1;     // get number of digits in num
+    if (!(numDigits%2))                   // If odd number of digits append a zero
+    //charBuffer[location] = num;
+                                 */
+}
+
+void readInt(char** arg)        // 'I'**
+{
+                        /*
+    int location = atoi(*arg);      // get location
+    arg++;
+    
+    for (int i=sizeof(int); i>0; i--)
+    {
+        
+    }                   */
+}
+
+void writeFloat(char** arg)         // 'f'
 {
     
 }
 
-void writeInt(char** arg)
+void readFloat(char** arg)          // 'F'
 {
     
 }
 
-void readInt(char** arg)
+void writeString(char** arg)            // 's'
 {
     
 }
 
-void writeFloat(char** arg)
+void readString(char** arg)         // 'S'
 {
     
 }
 
-void readFloat(char** arg)
+void writeToFile(char** arg)        // 'w'**
 {
     
 }
 
-void writeString(char** arg)
-{
-    
-}
-
-void readString(char** arg)
-{
-    
-}
-
-void writeToFile(char** arg)
-{
-    
-}
-
-void readFileToBuf(char** arg)
+void readFileToBuf(char** arg)          // 'r'
 {
     
 }
@@ -170,8 +215,7 @@ int main(int argc, const char * argv[])
                 break;
             case 'r' : readFileToBuf(arg);
                 break;
-
         }
-        return 0;
     }
+    return 0;
 }
