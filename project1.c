@@ -26,7 +26,7 @@ char ** arg;                 // working pointer that steps through the args
 char charBuffer[128];             // the 128 byte buffer that holds all input numbers
 
 
-void list()
+void list()         // 'l' **
 {
             /*
     for (int k=0; k<128; k++)       // testing charbuffer
@@ -38,13 +38,13 @@ void list()
     {
         for (int i=0; i<16; ++i)    // print first 16 char array spots
         {
-            printf("%02x", charBuffer[j*16+i]);
+            printf("%02x ", charBuffer[j*16+i]);       // row majoy ordering
         }
         printf("\n");
     }
 }
 
-void zero()
+void zero()         // 'z'** zeroes out entire buffer
 {
     for (int i=0; i<128; i++)
     {
@@ -52,75 +52,119 @@ void zero()
     }
 }
 
-void writeByte(char** args)   // set the specified byte to input value
+void writeByte(char** arg)   // 'b'** set the specified byte to input value
 {
     // TODO: error checking for number of args.
-    int* location = (int*) *args;       // will grab the next 4 bytesfor an int
-    args++;
-    charBuffer[*location] = **args;
-    
+    int location = atoi(*arg);       // atoi() converts char buffer to int
+    arg++;
+    charBuffer[location] = atoi(*arg); // convert char array at *arg to int
 }
 
-void readByte(char** arg)
+void readByte(char** arg)           // 'B'**
 {
-    
+    int location = atoi(*arg);
+    printf("%d\n", charBuffer[location]);
 }
-void writeHex(char** arb)
+void writeHex(char** arg)               // 'h'
 {
+    int location = atoi(*arg);
+    arg++;                      // move arg to next number
+    // call charToHex function before writing to buffer
     
-}
-
-void writeChar(char** arg)
-{
-    
-}
-
-void readHex(char** arg)
-{
-    
+    long int num = strtol(*arg, 0,16); // convert string to long, tell it the values in that string are in hexadecimal
+    //char first = (*arg)[0];//**arg;
+    //char second = (*arg)[1]; //*(*arg+1);
+        charBuffer[location] = num;
 }
 
-void readChar(char** arg)
-{
-    
-}
-
-void writeInt(char** arg)
+void writeChar(char** arg)          // 'c'
 {
     
 }
 
-void readInt(char** arg)
+void readHex(char** arg)            // 'H'
 {
     
 }
 
-void writeFloat(char** arg)
+void readChar(char** arg)       // 'C'
 {
     
 }
 
-void readFloat(char** arg)
+void writeInt(char** arg)       // 'i'** write an integer value to buffer location. Stores over how ever many bytes are required.
+{
+    int location = atoi(*arg);
+    arg++;
+    int toStore = atoi(*arg);
+    char* ptr = &charBuffer[location];
+    memcpy(ptr, *arg, sizeof(toStore));
+    
+        /*
+    
+    int num = atoi(*arg)
+    //long int num = strtol(*arg, 0,16);
+    int input[sizeof(num)];
+    sprintf(input, "%02x", num);
+    
+    char* spotInMem = &charBuffer[location];
+    long int num = strtol(*arg, 0,16);
+    int numdigits = log10(num) + 1;
+    char s[numdigits];
+    sscanf(*arg, %02x, charBuffer[location]);
+    sprintf(s, %x02, num);
+    memcpy(spotInMem, *arg, strlen(*arg));
+                 */               /*
+    int location = atoi(*arg);
+    arg++;
+    
+    long int num = strtol(*arg, 0,16);  // convert character to hex
+    
+    int size = sizeof(num);
+    int numDigits = log10(num) + 1;     // get number of digits in num
+    if (!(numDigits%2))                   // If odd number of digits append a zero
+    //charBuffer[location] = num;
+                                 */
+}
+
+void readInt(char** arg)        // 'I'**
+{
+                        /*
+    int location = atoi(*arg);      // get location
+    arg++;
+    
+    for (int i=sizeof(int); i>0; i--)
+    {
+        
+    }                   */
+}
+
+void writeFloat(char** arg)         // 'f'
 {
     
 }
 
-void writeString(char** arg)
+void readFloat(char** arg)          // 'F'
 {
     
 }
 
-void readString(char** arg)
+void writeString(char** arg)            // 's'
 {
     
 }
 
-void writeToFile(char** arg)
+void readString(char** arg)         // 'S'
 {
     
 }
 
-void readFileToBuf(char** arg)
+void writeToFile(char** arg)        // 'w'**
+{
+    
+}
+
+void readFileToBuf(char** arg)          // 'r'
 {
     
 }
@@ -130,11 +174,14 @@ int main(int argc, const char * argv[])
 {
     while(fgets(in_buffer, 100, stdin)!= NULL) // TODO: check         MAX_ARGS
     {
-        arg = args;
+        arg = args;                 // arg is like an iterator through string of arguments (args)
         *arg++ = strtok(in_buffer,SEPARATORS);   // tokenize input
         while ((*arg++ = strtok(NULL,SEPARATORS)));
+        arg = args;
+        char option = **arg;
         arg++;
-        switch(*arg[0])
+        
+        switch(option)
         {
             case 'l' :  list();
                 break;
@@ -168,8 +215,7 @@ int main(int argc, const char * argv[])
                 break;
             case 'r' : readFileToBuf(arg);
                 break;
-
         }
-        return 0;
     }
+    return 0;
 }
