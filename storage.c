@@ -20,7 +20,7 @@ STORAGE * init_storage(char * name)
     }
     else // open file successful
     {
-       return st; 
+        return st;
     }
 }
 
@@ -30,23 +30,23 @@ STORAGE * init_storage(char * name)
 int close_storage(STORAGE *storage)
 {
     int ret = close(storage->fd);
-    free(storage); 
+    free(storage);
     return ret;
 }
 
 /*
  * reads len num of bytes into buf starting with offset location. Returns
- * number of bytes read. 0 if at EOF. or a negative num on error. 
+ * number of bytes read. 0 if at EOF. or a negative num on error.
  */
 int get_bytes(STORAGE *storage, unsigned char *buf, int location, int len)
 {
-    //     
-    int off = lseek(storage->fd, location, SEEK_SET);
+    //
+    off_t off = lseek(storage->fd, location, SEEK_SET);
     if (off == -1) perror("error has occured during lseek()");
     int ret = read(storage->fd, buf, len); //TA said it is fine to use len directly - the size of a char is one byte he said.
     if (ret < 0) perror ("Read error");
     if (ret == 0) printf("EOF\n");
-
+    
     
     
     
@@ -59,10 +59,10 @@ int get_bytes(STORAGE *storage, unsigned char *buf, int location, int len)
  */
 int put_bytes(STORAGE *storage, unsigned char *buf, int location, int len)
 {
-   off_t off = lseek(storage->fd, location, SEEK_SET);  // set offset to location from parameter
+    off_t off = lseek(storage->fd, location, SEEK_SET);  // set offset to location from parameter
     if (off == -1) perror("error has occurred during lseek() operation");
-    int ret = write(storage->fd, buf, len); //TA said to use len directly - the size of a char is 1 byte 
-    if (ret == -1) 
+    int ret = write(storage->fd, buf, len); //TA said to use len directly - the size of a char is 1 byte
+    if (ret == -1)
     {
         perror("error has occured during write() operation");
         return -1;
@@ -71,12 +71,17 @@ int put_bytes(STORAGE *storage, unsigned char *buf, int location, int len)
     return ret;
 }
 
+// for testing purposes below:
+
 int main()
 {
     // testing init_storage
     init_storage("testFile");
-
-
+    
+    
     return 0;
     
 }
+
+
+

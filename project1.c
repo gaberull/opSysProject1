@@ -38,7 +38,7 @@ void list()         // 'l' **
     {
         for (int i=0; i<16; ++i)    // print first 16 char array spots
         {
-            printf("%02x ", charBuffer[j*16+i]);       // row majoy ordering
+            printf("%02x ", charBuffer[j*16+i]);       // row major ordering
         }
         printf("\n");
     }
@@ -96,6 +96,7 @@ void writeInt(char** arg)       // 'i'** write an integer value to buffer locati
 {
     int location = atoi(*arg);
     arg++;
+    //long int num = strtol(*arg, 0,16);
     int toStore = atoi(*arg);
     char* ptr = &charBuffer[location];
     memcpy(ptr, *arg, sizeof(toStore));
@@ -129,14 +130,10 @@ void writeInt(char** arg)       // 'i'** write an integer value to buffer locati
 
 void readInt(char** arg)        // 'I'**
 {
-                        /*
+    
     int location = atoi(*arg);      // get location
     arg++;
-    
-    for (int i=sizeof(int); i>0; i--)
-    {
-        
-    }                   */
+    printf("%d", charBuffer[location]);
 }
 
 void writeFloat(char** arg)         // 'f'
@@ -219,3 +216,4 @@ int main(int argc, const char * argv[])
     }
     return 0;
 }
+                                                     
