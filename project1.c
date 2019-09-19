@@ -133,7 +133,7 @@ void readInt(char** arg)        // 'I'**
     
     int location = atoi(*arg);      // get location
     arg++;
-    printf("%d", charBuffer[location]);
+    printf("%d\n", charBuffer[location]);
 }
 
 void writeFloat(char** arg)         // 'f'
