@@ -99,11 +99,11 @@ void writeInt(char** arg)       // 'i'** write an integer value to buffer locati
     //long int num = strtol(*arg, 0,16);
     int toStore = atoi(*arg);
     char* ptr = &charBuffer[location];
-    memcpy(ptr, *arg, sizeof(toStore));
+    memcpy(ptr, &toStore, sizeof(toStore));
     
         /*
     
-    int num = atoi(*arg)
+    int num = atoi(*arg)t
     //long int num = strtol(*arg, 0,16);
     int input[sizeof(num)];
     sprintf(input, "%02x", num);
