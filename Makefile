@@ -8,7 +8,6 @@ project1: project1.o storage.o
 
 storage.o: storage.c storage.h
 	gcc -c storage.c
-
 clean:
 	rm -f *.o project1
 
