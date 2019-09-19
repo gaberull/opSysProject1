@@ -72,7 +72,7 @@ int put_bytes(STORAGE *storage, unsigned char *buf, int location, int len)
 }
 
 // for testing purposes below:
-
+                                /*
 int main()
 {
     // testing init_storage
@@ -83,5 +83,5 @@ int main()
     
 }
 
-
+                                 */
 
