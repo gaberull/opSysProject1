@@ -23,7 +23,7 @@ const char SEPARATORS[] = " \t\n";
 char in_buffer[200];           // Input buffer from STDIN. command input buffer INBUFFSIZE = 200
 char * args[100];               // the arguments split up
 char ** arg;                 // working pointer that steps through the args
-char charBuffer[128];             // the 128 byte buffer that holds all input numbers
+unsigned char charBuffer[128];             // the 128 byte buffer that holds all input numbers
 
 
 void list()         // 'l' **
@@ -98,7 +98,7 @@ void writeInt(char** arg)       // 'i'** write an integer value to buffer locati
     arg++;
     //long int num = strtol(*arg, 0,16);
     int toStore = atoi(*arg);
-    char* ptr = &charBuffer[location];
+    unsigned char* ptr = &charBuffer[location];
     memcpy(ptr, &toStore, sizeof(toStore));
     
         /*
@@ -133,7 +133,15 @@ void readInt(char** arg)        // 'I'**
     
     int location = atoi(*arg);      // get location
     arg++;
-    printf("%d\n", charBuffer[location]);
+    
+    int result=0;
+    unsigned char* ptr = &charBuffer[location];
+    memcpy(&result, ptr, sizeof(result));
+    
+    printf("%d\n", result);
+                                                        /*
+    int toStore = atoi(*arg);
+               */
 }
 
 void writeFloat(char** arg)         // 'f'
