@@ -54,7 +54,7 @@ void writeByte(char** arg)   // 'b'** set the specified byte to input value
     charBuffer[location] = atoi(*arg); // convert char array at *arg to int
 }
 
-void readByte(char** arg)           // 'B'**
+void readByte(char** arg)           // 'B'** Read byte in decimal
 {
     int location = atoi(*arg);
     printf("%d\n", charBuffer[location]);       // print number in decimal
@@ -80,10 +80,11 @@ void writeChar(char** arg)          // 'c' TODO: check to make sure can't handle
 
 void readHex(char** arg)            // 'H' prints off the value of the byte in hexadecimal
 {
-    
+    int location = atoi(*arg);      // get location
+    printf("%x\n", charBuffer[location]);   // print value off in hex
 }
 
-void readChar(char** arg)       // 'C' Read character value (glyph) TODO: TEST
+void readChar(char** arg)       // 'C' Read character value (glyph) TODO: See if need to copy it out like readInt
 {
     int location = atoi(*arg);      // grab int location in buffer
     arg++;                  // increment counter to next argument
@@ -169,7 +170,7 @@ int main(int argc, const char * argv[])
                 break;
             case 'h' : writeHex(arg);
                 break;
-            case 'H' : readByte(arg);
+            case 'H' : readHex(arg);
                 break;
             case 'c' : writeChar(arg);
                 break;
