@@ -28,12 +28,6 @@ unsigned char charBuffer[128];             // the 128 byte buffer that holds all
 
 void list()         // 'l' **
 {
-            /*
-    for (int k=0; k<128; k++)       // testing charbuffer
-    {
-        charBuffer[k] = 0;
-    }
-             */
     for (int j=0; j<8; j++)
     {
         for (int i=0; i<16; ++i)    // print first 16 char array spots
@@ -77,9 +71,11 @@ void writeHex(char** arg)               // 'h'
         charBuffer[location] = num;
 }
 
-void writeChar(char** arg)          // 'c'
+void writeChar(char** arg)          // 'c' TODO: test
 {
-    
+    int location = atoi(*arg);
+    arg++;
+    charBuffer[location] = **arg;
 }
 
 void readHex(char** arg)            // 'H'
@@ -100,37 +96,10 @@ void writeInt(char** arg)       // 'i'** write an integer value to buffer locati
     int toStore = atoi(*arg);
     unsigned char* ptr = &charBuffer[location];
     memcpy(ptr, &toStore, sizeof(toStore));
-    
-        /*
-    
-    int num = atoi(*arg)t
-    //long int num = strtol(*arg, 0,16);
-    int input[sizeof(num)];
-    sprintf(input, "%02x", num);
-    
-    char* spotInMem = &charBuffer[location];
-    long int num = strtol(*arg, 0,16);
-    int numdigits = log10(num) + 1;
-    char s[numdigits];
-    sscanf(*arg, %02x, charBuffer[location]);
-    sprintf(s, %x02, num);
-    memcpy(spotInMem, *arg, strlen(*arg));
-                 */               /*
-    int location = atoi(*arg);
-    arg++;
-    
-    long int num = strtol(*arg, 0,16);  // convert character to hex
-    
-    int size = sizeof(num);
-    int numDigits = log10(num) + 1;     // get number of digits in num
-    if (!(numDigits%2))                   // If odd number of digits append a zero
-    //charBuffer[location] = num;
-                                 */
 }
 
 void readInt(char** arg)        // 'I'**
 {
-    
     int location = atoi(*arg);      // get location
     arg++;
     
@@ -141,7 +110,7 @@ void readInt(char** arg)        // 'I'**
     printf("%d\n", result);
                                                         /*
     int toStore = atoi(*arg);
-               */
+                                                         */
 }
 
 void writeFloat(char** arg)         // 'f'
@@ -174,7 +143,6 @@ void readFileToBuf(char** arg)          // 'r'
     
 }
 
-                 
 int main(int argc, const char * argv[])
 {
     while(fgets(in_buffer, 100, stdin)!= NULL) // TODO: check         MAX_ARGS
@@ -224,4 +192,3 @@ int main(int argc, const char * argv[])
     }
     return 0;
 }
-                                                     
