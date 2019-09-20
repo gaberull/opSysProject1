@@ -40,7 +40,7 @@ void list()         // 'l' **
 
 void zero()         // 'z'** zeroes out entire buffer
 {
-    for (int i=0; i<128; i++)
+    for (int i=0; i<128; i++)       // iterate through whole buffer and set to zero
     {
         charBuffer[i] = 0;
     }
@@ -57,7 +57,7 @@ void writeByte(char** arg)   // 'b'** set the specified byte to input value
 void readByte(char** arg)           // 'B'**
 {
     int location = atoi(*arg);
-    printf("%d\n", charBuffer[location]);
+    printf("%d\n", charBuffer[location]);       // print number in decimal
 }
 void writeHex(char** arg)               // 'h'
 {
@@ -71,20 +71,23 @@ void writeHex(char** arg)               // 'h'
         charBuffer[location] = num;
 }
 
-void writeChar(char** arg)          // 'c' TODO: test
+void writeChar(char** arg)          // 'c' TODO: check to make sure can't handle multiple bytes (2 chars) or if I need to handle that error. Also make sure it stores it in ascii. (currently printing ascii equivalent in hex)
 {
     int location = atoi(*arg);
     arg++;
     charBuffer[location] = **arg;
 }
 
-void readHex(char** arg)            // 'H'
+void readHex(char** arg)            // 'H' prints off the value of the byte in hexadecimal
 {
     
 }
 
-void readChar(char** arg)       // 'C'
+void readChar(char** arg)       // 'C' Read character value (glyph) TODO: TEST
 {
+    int location = atoi(*arg);      // grab int location in buffer
+    arg++;                  // increment counter to next argument
+    printf("%c\n", charBuffer[location]); // print character value
     
 }
 
@@ -145,7 +148,7 @@ void readFileToBuf(char** arg)          // 'r'
 
 int main(int argc, const char * argv[])
 {
-    while(fgets(in_buffer, 100, stdin)!= NULL) // TODO: check         MAX_ARGS
+    while(fgets(in_buffer, 100, stdin)!= NULL) // while input string is coming in
     {
         arg = args;                 // arg is like an iterator through string of arguments (args)
         *arg++ = strtok(in_buffer,SEPARATORS);   // tokenize input
