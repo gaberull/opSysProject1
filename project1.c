@@ -127,17 +127,42 @@ void readFloat(char** arg)          // 'F'
     
 }
 
-void writeString(char** arg)            // 's'
+void writeString(char** arg)            // 's'      // TODO: needs testing
 {
+    int location = atoi(*arg);
+    arg++;
     
+    //char str[50];
+    int size = (int)strlen(*arg) + 1;       // add one to size of *arg for null terminator
+    char str[size];
+    sscanf(*arg, "%s", str);    // use sscanf to copy string over to a new string then copy it over
+    int i = 0;
+    while (1)
+    {
+        charBuffer[location] = str[i];
+        location++;
+        i++;
+        if (str[i] == '\0')
+        {
+            charBuffer[location] = '\0';    // copy over null terminating character TODO: is this necessary? It is one longer and it is null by default
+            break;      // copy over until we hit null terminating character
+        }
+    }
 }
 
-void readString(char** arg)         // 'S'
+void readString(char** arg)         // 'S'  reads string from buffer
 {
+    int location = atoi(*arg);
     
+    while (charBuffer[location] != '\0')
+    {
+        printf("%c", charBuffer[location]);
+        location++;
+    }
+    printf("\n");
 }
 
-void writeToFile(char** arg)        // 'w'**
+void writeToFile(char** arg)        // 'w'
 {
     
 }
