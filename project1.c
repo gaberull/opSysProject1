@@ -28,12 +28,6 @@ unsigned char charBuffer[128];             // the 128 byte buffer that holds all
 
 void list()         // 'l' **
 {
-            /*
-    for (int k=0; k<128; k++)       // testing charbuffer
-    {
-        charBuffer[k] = 0;
-    }
-             */
     for (int j=0; j<8; j++)
     {
         for (int i=0; i<16; ++i)    // print first 16 char array spots
@@ -46,7 +40,7 @@ void list()         // 'l' **
 
 void zero()         // 'z'** zeroes out entire buffer
 {
-    for (int i=0; i<128; i++)
+    for (int i=0; i<128; i++)       // iterate through whole buffer and set to zero
     {
         charBuffer[i] = 0;
     }
@@ -60,10 +54,10 @@ void writeByte(char** arg)   // 'b'** set the specified byte to input value
     charBuffer[location] = atoi(*arg); // convert char array at *arg to int
 }
 
-void readByte(char** arg)           // 'B'**
+void readByte(char** arg)           // 'B'** Read byte in decimal
 {
     int location = atoi(*arg);
-    printf("%d\n", charBuffer[location]);
+    printf("%d\n", charBuffer[location]);       // print number in decimal
 }
 void writeHex(char** arg)               // 'h'
 {
@@ -77,18 +71,24 @@ void writeHex(char** arg)               // 'h'
         charBuffer[location] = num;
 }
 
-void writeChar(char** arg)          // 'c'
+void writeChar(char** arg)          // 'c' TODO: check to make sure can't handle multiple bytes (2 chars) or if I need to handle that error. Also make sure it stores it in ascii. (currently printing ascii equivalent in hex)
 {
-    
+    int location = atoi(*arg);
+    arg++;
+    charBuffer[location] = **arg;
 }
 
-void readHex(char** arg)            // 'H'
+void readHex(char** arg)            // 'H' prints off the value of the byte in hexadecimal
 {
-    
+    int location = atoi(*arg);      // get location
+    printf("%x\n", charBuffer[location]);   // print value off in hex
 }
 
-void readChar(char** arg)       // 'C'
+void readChar(char** arg)       // 'C' Read character value (glyph) TODO: See if need to copy it out like readInt
 {
+    int location = atoi(*arg);      // grab int location in buffer
+    arg++;                  // increment counter to next argument
+    printf("%c\n", charBuffer[location]); // print character value
     
 }
 
@@ -100,37 +100,10 @@ void writeInt(char** arg)       // 'i'** write an integer value to buffer locati
     int toStore = atoi(*arg);
     unsigned char* ptr = &charBuffer[location];
     memcpy(ptr, &toStore, sizeof(toStore));
-    
-        /*
-    
-    int num = atoi(*arg)t
-    //long int num = strtol(*arg, 0,16);
-    int input[sizeof(num)];
-    sprintf(input, "%02x", num);
-    
-    char* spotInMem = &charBuffer[location];
-    long int num = strtol(*arg, 0,16);
-    int numdigits = log10(num) + 1;
-    char s[numdigits];
-    sscanf(*arg, %02x, charBuffer[location]);
-    sprintf(s, %x02, num);
-    memcpy(spotInMem, *arg, strlen(*arg));
-                 */               /*
-    int location = atoi(*arg);
-    arg++;
-    
-    long int num = strtol(*arg, 0,16);  // convert character to hex
-    
-    int size = sizeof(num);
-    int numDigits = log10(num) + 1;     // get number of digits in num
-    if (!(numDigits%2))                   // If odd number of digits append a zero
-    //charBuffer[location] = num;
-                                 */
 }
 
 void readInt(char** arg)        // 'I'**
 {
-    
     int location = atoi(*arg);      // get location
     arg++;
     
@@ -141,30 +114,66 @@ void readInt(char** arg)        // 'I'**
     printf("%d\n", result);
                                                         /*
     int toStore = atoi(*arg);
-               */
+                                                         */
 }
 
 void writeFloat(char** arg)         // 'f'
 {
+    int location = atoi(*arg);      // get location
+    arg++;
     
+    float num = atof(*arg);         // convert number to float
+    unsigned char* ptr = &charBuffer[location];
+    memcpy(ptr, &num, sizeof(num));
 }
 
 void readFloat(char** arg)          // 'F'
 {
+    int location = atoi(*arg);
+    arg++;
     
+    float result = 0.0;
+    unsigned char* ptr = &charBuffer[location];
+    memcpy(&result, ptr, sizeof(result));
+    printf("%f\n", result);
 }
 
-void writeString(char** arg)            // 's'
+void writeString(char** arg)            // 's'      // TODO: needs testing
 {
+    int location = atoi(*arg);
+    arg++;
     
+    //char str[50];
+    int size = (int)strlen(*arg) + 1;       // add one to size of *arg for null terminator
+    char str[size];
+    sscanf(*arg, "%s", str);    // use sscanf to copy string over to a new string then copy it over
+    int i = 0;
+    while (1)
+    {
+        charBuffer[location] = str[i];
+        location++;
+        i++;
+        if (str[i] == '\0')
+        {
+            charBuffer[location] = '\0';    // copy over null terminating character TODO: is this necessary? It is one longer and it is null by default
+            break;      // copy over until we hit null terminating character
+        }
+    }
 }
 
-void readString(char** arg)         // 'S'
+void readString(char** arg)         // 'S'  reads string from buffer
 {
+    int location = atoi(*arg);
     
+    while (charBuffer[location] != '\0')
+    {
+        printf("%c", charBuffer[location]);
+        location++;
+    }
+    printf("\n");
 }
 
-void writeToFile(char** arg)        // 'w'**
+void writeToFile(char** arg)        // 'w'
 {
     
 }
@@ -174,10 +183,9 @@ void readFileToBuf(char** arg)          // 'r'
     
 }
 
-                 
 int main(int argc, const char * argv[])
 {
-    while(fgets(in_buffer, 100, stdin)!= NULL) // TODO: check         MAX_ARGS
+    while(fgets(in_buffer, 100, stdin)!= NULL) // while input string is coming in
     {
         arg = args;                 // arg is like an iterator through string of arguments (args)
         *arg++ = strtok(in_buffer,SEPARATORS);   // tokenize input
@@ -198,7 +206,7 @@ int main(int argc, const char * argv[])
                 break;
             case 'h' : writeHex(arg);
                 break;
-            case 'H' : readByte(arg);
+            case 'H' : readHex(arg);
                 break;
             case 'c' : writeChar(arg);
                 break;
@@ -224,4 +232,3 @@ int main(int argc, const char * argv[])
     }
     return 0;
 }
-                                                     
