@@ -119,12 +119,23 @@ void readInt(char** arg)        // 'I'**
 
 void writeFloat(char** arg)         // 'f'
 {
+    int location = atoi(*arg);      // get location
+    arg++;
     
+    float num = atof(*arg);         // convert number to float
+    unsigned char* ptr = &charBuffer[location];
+    memcpy(ptr, &num, sizeof(num));
 }
 
 void readFloat(char** arg)          // 'F'
 {
+    int location = atoi(*arg);
+    arg++;
     
+    float result = 0.0;
+    unsigned char* ptr = &charBuffer[location];
+    memcpy(&result, ptr, sizeof(result));
+    printf("%f\n", result);
 }
 
 void writeString(char** arg)            // 's'      // TODO: needs testing
