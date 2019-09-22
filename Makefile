@@ -10,7 +10,3 @@ storage.o: storage.c storage.h
 	gcc -c storage.c
 clean:
 	rm -f *.o project1
-
-
-
-
