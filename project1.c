@@ -15,6 +15,8 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "storage.c"
+#include "storage.h"
 //#define MAX_ARGS 3;
 //#define INBUFFSIZE 128;   // size of buffer in bytes
 
@@ -46,7 +48,7 @@ void zero()         // 'z'** zeroes out entire buffer
     }
 }
 
-void writeByte(char** arg)   // 'b'** set the specified byte to input value
+void writeByte(char** arg)   // 'b'** set the specified byte to input value (decimal)
 {
     // TODO: error checking for number of args.
     int location = atoi(*arg);       // atoi() converts char buffer to int
@@ -112,9 +114,6 @@ void readInt(char** arg)        // 'I'**
     memcpy(&result, ptr, sizeof(result));
     
     printf("%d\n", result);
-                                                        /*
-    int toStore = atoi(*arg);
-                                                         */
 }
 
 void writeFloat(char** arg)         // 'f'
@@ -175,12 +174,24 @@ void readString(char** arg)         // 'S'  reads string from buffer
 
 void writeToFile(char** arg)        // 'w'
 {
-    
+    int offset = atoi(*arg);    // offset in the file to write to
+    arg++;
+    int len = atoi(*arg);       // get number of bytes to read 0 - 128
+    STORAGE* st = init_storage("storage.bin");
+    if (put_bytes(st, charBuffer, offset, len) != len)
+        perror("write function failed");
+    close_storage(st);
 }
 
 void readFileToBuf(char** arg)          // 'r'
 {
-    
+    int offset = atoi(*arg);
+    arg++;
+    int len = atoi(*arg);
+    STORAGE* st = init_storage("storage.bin");
+    if (get_bytes(st, charBuffer, offset, len) != len)
+        perror("read to buffer failed");
+    close_storage(st);
 }
 
 int main(int argc, const char * argv[])
@@ -228,7 +239,10 @@ int main(int argc, const char * argv[])
                 break;
             case 'r' : readFileToBuf(arg);
                 break;
+                
+                // TODO: possibly default statment for close_storage(st) when there are no more commands
         }
     }
+    //close_storage(st);
     return 0;
 }
