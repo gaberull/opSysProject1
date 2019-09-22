@@ -12,10 +12,10 @@
  */
 //#include <stdio.h>
 #include <string.h>
-#include <ctype.h>
+//#include <ctype.h>
 //#include <stdlib.h>
-#include <stdbool.h>
-#include "storage.c"
+//#include <stdbool.h>
+#include "storage.h"
 //#define MAX_ARGS 3;
 //#define INBUFFSIZE 128;   // size of buffer in bytes
 
