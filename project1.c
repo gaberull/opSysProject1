@@ -16,7 +16,6 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "storage.c"
-#include "storage.h"
 //#define MAX_ARGS 3;
 //#define INBUFFSIZE 128;   // size of buffer in bytes
 
@@ -28,7 +27,7 @@ char ** arg;                 // working pointer that steps through the args
 unsigned char charBuffer[128];             // the 128 byte buffer that holds all input numbers
 
 
-void list()         // 'l' **
+void list()         // 'l' **   list contents of buffer
 {
     for (int j=0; j<8; j++)
     {
@@ -61,15 +60,13 @@ void readByte(char** arg)           // 'B'** Read byte in decimal
     int location = atoi(*arg);
     printf("%d\n", charBuffer[location]);       // print number in decimal
 }
-void writeHex(char** arg)               // 'h'
+void writeHex(char** arg)               // 'h' write hex number to buffer
 {
     int location = atoi(*arg);
     arg++;                      // move arg to next number
     // call charToHex function before writing to buffer
     
     long int num = strtol(*arg, 0,16); // convert string to long, tell it the values in that string are in hexadecimal
-    //char first = (*arg)[0];//**arg;
-    //char second = (*arg)[1]; //*(*arg+1);
         charBuffer[location] = num;
 }
 
@@ -91,20 +88,19 @@ void readChar(char** arg)       // 'C' Read character value (glyph) TODO: See if
     int location = atoi(*arg);      // grab int location in buffer
     arg++;                  // increment counter to next argument
     printf("%c\n", charBuffer[location]); // print character value
-    
 }
 
 void writeInt(char** arg)       // 'i'** write an integer value to buffer location. Stores over how ever many bytes are required.
 {
-    int location = atoi(*arg);
+    int location = atoi(*arg);  // get location
     arg++;
     //long int num = strtol(*arg, 0,16);
     int toStore = atoi(*arg);
-    unsigned char* ptr = &charBuffer[location];
+    unsigned char* ptr = &charBuffer[location];     // create pointer to spot to store in
     memcpy(ptr, &toStore, sizeof(toStore));
 }
 
-void readInt(char** arg)        // 'I'**
+void readInt(char** arg)        // 'I'**    reads in from buffer
 {
     int location = atoi(*arg);      // get location
     arg++;
@@ -116,7 +112,7 @@ void readInt(char** arg)        // 'I'**
     printf("%d\n", result);
 }
 
-void writeFloat(char** arg)         // 'f'
+void writeFloat(char** arg)         // 'f'  write floating point number to buffer
 {
     int location = atoi(*arg);      // get location
     arg++;
@@ -126,7 +122,7 @@ void writeFloat(char** arg)         // 'f'
     memcpy(ptr, &num, sizeof(num));
 }
 
-void readFloat(char** arg)          // 'F'
+void readFloat(char** arg)          // 'F'  read floating point number from buffer
 {
     int location = atoi(*arg);
     arg++;
@@ -137,7 +133,7 @@ void readFloat(char** arg)          // 'F'
     printf("%f\n", result);
 }
 
-void writeString(char** arg)            // 's'      // TODO: needs testing
+void writeString(char** arg)            // 's' Write string to buffer TODO: test
 {
     int location = atoi(*arg);
     arg++;
@@ -163,7 +159,6 @@ void writeString(char** arg)            // 's'      // TODO: needs testing
 void readString(char** arg)         // 'S'  reads string from buffer
 {
     int location = atoi(*arg);
-    
     while (charBuffer[location] != '\0')
     {
         printf("%c", charBuffer[location]);
@@ -172,7 +167,7 @@ void readString(char** arg)         // 'S'  reads string from buffer
     printf("\n");
 }
 
-void writeToFile(char** arg)        // 'w'
+void writeToFile(char** arg)        // 'w'  writes to storage.bin file
 {
     int offset = atoi(*arg);    // offset in the file to write to
     arg++;
@@ -183,14 +178,14 @@ void writeToFile(char** arg)        // 'w'
     close_storage(st);
 }
 
-void readFileToBuf(char** arg)          // 'r'
+void readFileToBuf(char** arg)          // 'r' Reads from the storage.bin file to charBuffer[]
 {
     int offset = atoi(*arg);
     arg++;
-    int len = atoi(*arg);
+    int len = atoi(*arg);           // number of bytes to read 0 - 128
     STORAGE* st = init_storage("storage.bin");
     if (get_bytes(st, charBuffer, offset, len) != len)
-        perror("read to buffer failed");
+        perror("read to buffer froom file failed");
     close_storage(st);
 }
 
@@ -239,10 +234,7 @@ int main(int argc, const char * argv[])
                 break;
             case 'r' : readFileToBuf(arg);
                 break;
-                
-                // TODO: possibly default statment for close_storage(st) when there are no more commands
         }
     }
-    //close_storage(st);
     return 0;
 }
