@@ -10,10 +10,10 @@
  * location in the storage file, or that the buffer values can be read
  * from a specific location in the file.
  */
-#include <stdio.h>
+//#include <stdio.h>
 #include <string.h>
 #include <ctype.h>
-#include <stdlib.h>
+//#include <stdlib.h>
 #include <stdbool.h>
 #include "storage.c"
 //#define MAX_ARGS 3;
