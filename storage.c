@@ -33,23 +33,19 @@ int close_storage(STORAGE *storage)
     free(storage);
     return ret;
 }
-
 /*
  * reads len num of bytes into buf starting with offset location. Returns
  * number of bytes read. 0 if at EOF. or a negative num on error.
  */
-int get_bytes(STORAGE *storage, unsigned char *buf, int location, int len)
+int get_bytes(STORAGE *storage, unsigned char *buf, int location, int len)      // FIXME: broken
 {
     //
     off_t off = lseek(storage->fd, location, SEEK_SET);
     if (off == -1) perror("error has occured during lseek()");
-    int ret = read(storage->fd, buf, len); //TA said it is fine to use len directly - the size of a char is one byte he said.
+    ssize_t ret = read(storage->fd, buf, len); //TA said it is fine to use len directly - the size of a char is one byte he said.
     if (ret < 0) perror ("Read error");
     if (ret == 0) printf("EOF\n");
-    
-    
-    
-    
+    // TODO: consider using int (with cast?) like his examples
     return ret;
 }
 
@@ -70,18 +66,3 @@ int put_bytes(STORAGE *storage, unsigned char *buf, int location, int len)
     if (ret == 0) printf("EOF\n");
     return ret;
 }
-
-// for testing purposes below:
-                                /*
-int main()
-{
-    // testing init_storage
-    init_storage("testFile");
-    
-    
-    return 0;
-    
-}
-
-                                 */
-
