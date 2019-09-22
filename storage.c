@@ -1,10 +1,4 @@
-#include <sys/types.h>
-#include <unistd.h>
-#include <sys/stat.h>
-#include <fcntl.h>
-#include <stdio.h>
 #include "storage.h"
-#include <stdlib.h>
 
 /* opens the file for reading and writing, creating it if it doesn't exist. If
  * successful, returns dynamically created STORAGE obj. Else returns NULL
